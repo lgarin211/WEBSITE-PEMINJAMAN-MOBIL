@@ -1,8 +1,8 @@
 <?php
   $host = 'localhost'; // Ganti dengan host database Anda
-  $username = 'root'; // Ganti dengan username database Anda
-  $password = ''; // Ganti dengan password database Anda
-  $database = 'sewamobil'; // Ganti dengan nama database Anda
+  $username = 'lahorasm_root'; // Ganti dengan username database Anda
+  $password = '@Lgarin211'; // Ganti dengan password database Anda
+  $database = 'lahorasm_root'; // Ganti dengan nama database Anda
   $conn = mysqli_connect($host, $username, $password, $database);
   $result;
   function dd($data)
