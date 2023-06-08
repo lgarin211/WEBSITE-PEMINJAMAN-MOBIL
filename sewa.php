@@ -1,9 +1,9 @@
 <?php
 // Koneksi ke database
 $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "sewamobil";
+$username = "lahorasm_root";
+$password = "@Lgarin211";
+$dbname = "lahorasm_root";
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // Periksa koneksi
