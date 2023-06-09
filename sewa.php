@@ -1,6 +1,6 @@
 <?php
   // Koneksi ke database
-  $servername = "103.219.251.244";
+  $host = "103.219.251.244";
   $username = "lahorasm_root";
   $password = "@Lgarin211";
   $dbname = "lahorasm_root";
