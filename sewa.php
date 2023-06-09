@@ -1,9 +1,14 @@
 <?php
   // Koneksi ke database
-  $host = "103.219.251.244";
-  $username = "lahorasm_root";
-  $password = "@Lgarin211";
-  $dbname = "lahorasm_root";
+  // $host = "103.219.251.244";
+  // $username = "lahorasm_root";
+  // $password = "@Lgarin211";
+  // $dbname = "lahorasm_root";
+
+   $host = '103.219.251.244'; // Ganti dengan host database Anda
+  $username = 'lahorasm_root'; // Ganti dengan username database Anda
+  $password = '@Lgarin211'; // Ganti dengan password database Anda
+  $database = 'lahorasm_root'; // Ganti dengan nama database Anda
 
   // $host = 'localhost'; // Ganti dengan host database Anda
   // $username = 'root'; // Ganti dengan username database Anda
