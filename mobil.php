@@ -1,8 +1,14 @@
 <?php
-  $host = 'localhost'; // Ganti dengan host database Anda
+  $host = '103.219.251.244'; // Ganti dengan host database Anda
   $username = 'lahorasm_root'; // Ganti dengan username database Anda
   $password = '@Lgarin211'; // Ganti dengan password database Anda
   $database = 'lahorasm_root'; // Ganti dengan nama database Anda
+
+  // $host = 'localhost'; // Ganti dengan host database Anda
+  // $username = 'root'; // Ganti dengan username database Anda
+  // $password = ''; // Ganti dengan password database Anda
+  // $database = 'sewamobil'; // Ganti dengan nama database Anda
+
   $conn = mysqli_connect($host, $username, $password, $database);
   $result;
   function dd($data)
@@ -93,16 +99,16 @@
             <td> <?=$harga?> </td>
             <td> <?=$publish?> </td>
             <td>
-              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal
-												<?=$id?>"> Update </button>
-              <a href="?id=
-												<?=$id?>&ac=dell" class="btn btn-danger btn-sm">Hapus </a>
+              <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#updateModal<?=$id?>">
+                 Update
+               </button>
+              <a href="?id=<?=$id?>&ac=dell" class="btn btn-danger btn-sm">
+                Hapus
+              </a>
             </td>
           </tr>
           <!-- Modal Update Data <?=$id?> -->
-          <div class="modal fade" id="updateModal
-										<?=$id?>" tabindex="-1" aria-labelledby="updateModalLabel
-										<?=$id?>" aria-hidden="true">
+          <div class="modal fade" id="updateModal<?=$id?>" tabindex="-1" aria-labelledby="updateModalLabel<?=$id?>" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -114,28 +120,23 @@
                   <div class="modal-body">
                     <div class="mb-3">
                       <label for="updatePlatNomor" class="form-label">Plat Nomor</label>
-                      <input type="text" class="form-control" id="updatePlatNomor" value="
-																	<?=$plat_nomor?>" name="updatePlatNomor" readonly>
+                      <input type="text" class="form-control" id="updatePlatNomor" value="<?=$plat_nomor?>" name="updatePlatNomor" readonly>
                     </div>
                     <div class="mb-3">
                       <label for="updateJenisMobil" class="form-label">Jenis Mobil</label>
-                      <input type="text" class="form-control" id="updateJenisMobil" value="
-																		<?=$jenis_mobil?>" name="updateJenisMobil">
+                      <input type="text" class="form-control" id="updateJenisMobil" value="<?=$jenis_mobil?>" name="updateJenisMobil">
                     </div>
                     <div class="mb-3">
                       <label for="updateLinkGambar" class="form-label">Link Gambar</label>
-                      <input type="text" class="form-control" id="updateLinkGambar" value="
-																			<?=$link_gambar?>" name="updateLinkGambar">
+                      <input type="text" class="form-control" id="updateLinkGambar" value="<?=$link_gambar?>" name="updateLinkGambar">
                     </div>
                     <div class="mb-3">
                       <label for="updateKondisi" class="form-label">Kondisi</label>
-                      <input type="text" class="form-control" id="updateKondisi" value="
-																				<?=$kondisi?>" name="updateKondisi">
+                      <input type="text" class="form-control" id="updateKondisi" value="<?=$kondisi?>" name="updateKondisi">
                     </div>
                     <div class="mb-3">
                       <label for="updateHarga" class="form-label">Harga</label>
-                      <input type="text" class="form-control" id="updateHarga" value="
-																					<?=$harga?>" name="updateHarga">
+                      <input type="text" class="form-control" id="updateHarga" value="<?=$harga?>" name="updateHarga">
                     </div>
                     <div class="mb-3">
                       <div class="form-check">
@@ -212,112 +213,5 @@
     </div>
     <!-- Tambahkan script JavaScript untuk Bootstrap dan logika aksi -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // Aksi saat tombol "Simpan" di modal Create Data ditekan
-      document.querySelector('#createModal button[type="button"]').addEventListener('click', function() {
-        var platNomor = document.getElementById('platNomor').value;
-        var jenisMobil = document.getElementById('jenisMobil').value;
-        var linkGambar = document.getElementById('linkGambar').value;
-        var kondisi = document.getElementById('kondisi').value;
-        var harga = document.getElementById('harga').value;
-        var publish = document.getElementById('publishCheck').checked ? 1 : 0;
-        var data = {
-          platNomor: platNomor,
-          jenisMobil: jenisMobil,
-          linkGambar: linkGambar,
-          kondisi: kondisi,
-          harga: harga,
-          publishCheck: publish
-        };
-        // Kirim data baru ke server
-        fetch('url_server/mobil.php?ac=create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        }).then(response => {
-          if (response.ok) {
-            // Proses data yang berhasil disimpan
-            console.log('Data mobil berhasil disimpan');
-            // Lakukan tindakan lain seperti memperbarui tampilan atau mengambil data terbaru
-          } else {
-            throw new Error('Terjadi kesalahan saat menyimpan data');
-          }
-        }).catch(error => {
-          console.error('Terjadi kesalahan:', error);
-        });
-        // Tutup modal setelah menyimpan data
-        var createModal = bootstrap.Modal.getInstance(document.getElementById('createModal'));
-        createModal.hide();
-      });
-      // Aksi saat tombol "Simpan Perubahan" di modal Update Data ditekan
-      document.querySelector('#updateModal button[type="button"]').addEventListener('click', function() {
-        var platNomor = document.getElementById('updatePlatNomor').value;
-        var jenisMobil = document.getElementById('updateJenisMobil').value;
-        var linkGambar = document.getElementById('updateLinkGambar').value;
-        var kondisi = document.getElementById('updateKondisi').value;
-        var harga = document.getElementById('updateHarga').value;
-        var publish = document.getElementById('updatePublishCheck').checked ? 1 : 0;
-        var data = {
-          updatePlatNomor: platNomor,
-          updateJenisMobil: jenisMobil,
-          updateLinkGambar: linkGambar,
-          updateKondisi: kondisi,
-          updateHarga: harga,
-          updatePublishCheck: publish
-        };
-        // Kirim data pembaruan ke server
-        fetch('url_server/mobil.php?ac=update', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        }).then(response => {
-          if (response.ok) {
-            // Proses data yang berhasil diperbarui
-            console.log('Data mobil berhasil diperbarui');
-            // Lakukan tindakan lain seperti memperbarui tampilan atau mengambil data terbaru
-          } else {
-            throw new Error('Terjadi kesalahan saat memperbarui data');
-          }
-        }).catch(error => {
-          console.error('Terjadi kesalahan:', error);
-        });
-        // Tutup modal setelah menyimpan perubahan
-        var updateModal = bootstrap.Modal.getInstance(document.getElementById('updateModal'));
-        updateModal.hide();
-      });
-      // Aksi saat tombol "Hapus" pada tabel ditekan
-      var deleteButtons = document.querySelectorAll('table .btn-danger');
-      deleteButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-          var platNomor = this.getAttribute('data-plat-nomor');
-          // Kirim permintaan penghapusan data ke server
-          fetch('url_server/mobil.php?ac=hapus', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              platNomor: platNomor
-            })
-          }).then(response => {
-            if (response.ok) {
-              // Proses data yang berhasil dihapus
-              console.log('Data mobil berhasil dihapus');
-              // Lakukan tindakan lain seperti memperbarui tampilan atau mengambil data terbaru
-            } else {
-              throw new Error('Terjadi kesalahan saat menghapus data');
-            }
-          }).catch(error => {
-            console.error('Terjadi kesalahan:', error);
-          });
-          // Tindakan lain yang ingin Anda lakukan setelah menghapus data
-          // ...
-        });
-      });
-    </script>
   </body>
 </html>

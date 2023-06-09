@@ -1,10 +1,16 @@
 <?php
-// Koneksi ke database
-$servername = "localhost";
-$username = "lahorasm_root";
-$password = "@Lgarin211";
-$dbname = "lahorasm_root";
-$conn = new mysqli($servername, $username, $password, $dbname);
+  // Koneksi ke database
+  $servername = "103.219.251.244";
+  $username = "lahorasm_root";
+  $password = "@Lgarin211";
+  $dbname = "lahorasm_root";
+
+  // $host = 'localhost'; // Ganti dengan host database Anda
+  // $username = 'root'; // Ganti dengan username database Anda
+  // $password = ''; // Ganti dengan password database Anda
+  // $database = 'sewamobil'; // Ganti dengan nama database Anda
+
+$conn = mysqli_connect($host, $username, $password, $database);
 
 // Periksa koneksi
 if ($conn->connect_error) {
@@ -12,11 +18,10 @@ if ($conn->connect_error) {
 }
 
 // Periksa permintaan HTTP yang diterima
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" or $_SERVER["REQUEST_METHOD"] == "GET") {
   // Periksa tindakan yang diterima
   if (isset($_POST['action'])) {
     $action = $_POST['action'];
-
     // Periksa aksi "Update"
     if ($action === "update") {
       // Tangkap data yang diperbarui
@@ -94,8 +99,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . $sql . "<br>" . $conn->error;
       }
     }
+  }else if($_SERVER["REQUEST_METHOD"] == "GET"){
+    if(isset($_GET['action'])&&$_GET['action']=="update"){
+      $id = $_GET['id'];
+      $status_peminjaman = $_GET["blink"];
+      // Query untuk memperbarui data peminjaman mobil berdasarkan ID
+      $sql = "UPDATE peminjaman_mobil SET status_peminjaman='$status_peminjaman' WHERE id='$id'";
+      if ($conn->query($sql) === TRUE) {
+        // Redirect ke halaman utama
+        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        exit();
+      } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+      }
+    }
   }
 }
+
 
 // Query untuk mendapatkan data peminjaman mobil
 $sql = "SELECT * FROM peminjaman_mobil";
@@ -122,8 +142,6 @@ $conn->close();
         <input type="text" id="searchInput" class="form-control" placeholder="Cari...">
         <button type="button" class="btn btn-primary" onclick="searchData()">Cari</button>
       </div>
-      <button type="button" class="btn btn-primary" onclick="sortByNama()">Urutkan berdasarkan Nama</button>
-      <button type="button" class="btn btn-primary" onclick="sortByStatus()">Urutkan berdasarkan Status</button>
     </div>
     <table class="table table-striped">
       <thead>
@@ -141,7 +159,7 @@ $conn->close();
         <?php
         if ($result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
-            $id = NULL;
+            $id = $row["id"];
             $nama_peminjam = $row['nama_peminjam'];
             $tanggal_pinjam = $row['tanggal_pinjam'];
             $tanggal_kembali = $row['tanggal_kembali'];
@@ -158,11 +176,11 @@ $conn->close();
               <td><?php echo $status_peminjaman; ?></td>
               <td>
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="approveCheck<?php echo $id; ?>" onchange="approveData(<?php echo $id; ?>)" <?php if ($status_peminjaman == 'Approved') echo 'checked'; ?>>
+                  <input class="form-check-input" type="checkbox" id="approveCheck<?php echo $id; ?>" <?php echo ($status_peminjaman === "APPROVE") ? "checked" : ""; ?> onclick="linkup(<?php echo $id; ?>)">
                   <label class="form-check-label" for="approveCheck<?php echo $id; ?>">Approve</label>
                 </div>
-                <button type="button" class="btn btn-primary btn-sm" onclick="updateData(<?php echo $id; ?>)">Update</button>
-                <button type="button" class="btn btn-danger btn-sm" onclick="deleteData(<?php echo $id; ?>)">Hapus</button>
+                <!-- <button type="button" class="btn btn-primary btn-sm" onclick="updateData(<?php echo $id; ?>)">Update</button> -->
+                <!-- <button type="button" class="btn btn-danger btn-sm" onclick="deleteData(<?php echo $id; ?>)">Hapus</button> -->
               </td>
             </tr>
         <?php
@@ -178,121 +196,20 @@ $conn->close();
   <!-- Tambahkan script JavaScript untuk Bootstrap, pencarian, dan pengurutan -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    function searchData() {
-      var input = document.getElementById('searchInput').value.toUpperCase();
-      var table = document.querySelector('table');
-      var tbody = table.querySelector('tbody');
-      var rows = tbody.querySelectorAll('tr');
+    function linkup(params) {
+      console.log(params);
+      // get approveCheck
+      var approveCheck = document.getElementById("approveCheck" + params);
+      var p="APPROVE";
+      if(approveCheck.checked != true){
+        p="PENDING";
+      }
 
-      rows.forEach(function(row) {
-        var nama = row.cells[0].innerText.toUpperCase();
-        var status = row.cells[5].innerText.toUpperCase();
-
-        if (nama.includes(input) || status.includes(input)) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
+      window.location.replace("sewa.php?action=update&blink="+p+"&id=" + params);
     }
-
-    function sortByNama() {
-      var table = document.querySelector('table');
-      var tbody = table.querySelector('tbody');
-      var rows = Array.from(tbody.querySelectorAll('tr'));
-
-      rows.sort(function(a, b) {
-        var namaA = a.cells[0].innerText.toUpperCase();
-        var namaB = b.cells[0].innerText.toUpperCase();
-
-        if (namaA < namaB) {
-          return -1;
-        }
-        if (namaA > namaB) {
-          return 1;
-        }
-        return 0;
-      });
-
-      tbody.innerHTML = '';
-      rows.forEach(function(row) {
-        tbody.appendChild(row);
-      });
-    }
-
-    function sortByStatus() {
-      var table = document.querySelector('table');
-      var tbody = table.querySelector('tbody');
-      var rows = Array.from(tbody.querySelectorAll('tr'));
-
-      rows.sort(function(a, b) {
-        var statusA = a.cells[5].innerText.toUpperCase();
-        var statusB = b.cells[5].innerText.toUpperCase();
-
-        if (statusA < statusB) {
-          return -1;
-        }
-        if (statusA > statusB) {
-          return 1;
-        }
-        return 0;
-      });
-
-      tbody.innerHTML = '';
-      rows.forEach(function(row) {
-        tbody.appendChild(row);
-      });
-    }
-
-    function approveData(id) {
-      var checkbox = document.getElementById('approveCheck' + id);
-      var status = checkbox.checked ? 'Approved' : 'Pending';
-
-      // Kirim permintaan HTTP POST menggunakan AJAX
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'index.php', true);
-      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          console.log('Status peminjaman berhasil diubah.');
-        } else {
-          console.error('Terjadi kesalahan saat mengubah status peminjaman.');
-        }
-      };
-      xhr.send('action=approve&id=' + id);
-    }
-
-    function updateData(id) {
-      // Dapatkan data dari baris yang diklik
-      var row = document.getElementById('row' + id);
-      var nama_peminjam = row.cells[0].innerText;
-      var tanggal_pinjam = row.cells[1].innerText;
-      var tanggal_kembali = row.cells[2].innerText;
-      var jenis_mobil = row.cells[3].innerText;
-      var total_harga = row.cells[4].innerText;
-      var status_peminjaman = row.cells[5].innerText;
-
-      // Tampilkan formulir pengeditan
-      var form = '<form method="post" action="index.php">' +
-        '<input type="hidden" name="action" value="update">' +
-        '<input type="hidden" name="id" value="' + id + '">' +
-        '<input type="text" name="nama_peminjam" value="' + nama_peminjam + '">' +
-        '<input type="text" name="tanggal_pinjam" value="' + tanggal_pinjam + '">' +
-        '<input type="text" name="tanggal_kembali" value="' + tanggal_kembali + '">' +
-        '<input type="text" name="jenis_mobil" value="' + jenis_mobil + '">' +
-        '<input type="text" name="total_harga" value="' + total_harga + '">' +
-        '<input type="text" name="status_peminjaman" value="' + status_peminjaman + '">' +
-        '<button type="submit">Simpan</button>' +
-        '</form>';
-
-      // Ganti baris dengan formulir pengeditan
-      row.innerHTML = form;
-    }
-
     function deleteData(id) {
-      // Kirim permintaan HTTP POST menggunakan AJAX
       var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'index.php', true);
+      xhr.open('POST', 'sewa.php', true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.onload = function() {
         if (xhr.status === 200) {

@@ -1,8 +1,14 @@
 <?php
-  $host = 'localhost'; // Ganti dengan host database Anda
+  $host = '103.219.251.244'; // Ganti dengan host database Anda
   $username = 'lahorasm_root'; // Ganti dengan username database Anda
   $password = '@Lgarin211'; // Ganti dengan password database Anda
   $database = 'lahorasm_root'; // Ganti dengan nama database Anda
+  
+  // $host = 'localhost'; // Ganti dengan host database Anda
+  // $username = 'root'; // Ganti dengan username database Anda
+  // $password = ''; // Ganti dengan password database Anda
+  // $database = 'sewamobil'; // Ganti dengan nama database Anda
+
   $conn = mysqli_connect($host, $username, $password, $database);
   $result;
   function dd($data)
@@ -31,13 +37,13 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">Beranda</a>
+            <a class="nav-link" href="./index.php">Beranda</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Tentang</a>
+            <a class="nav-link" href="./sewa.php">Daftar Sewa</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Kontak</a>
+            <a class="nav-link" href="./mobil.php">Daftar Mobil</a>
           </li>
         </ul>
       </div>
