@@ -5,7 +5,7 @@
   // $password = "@Lgarin211";
   // $dbname = "lahorasm_root";
 
-   $host = '103.219.251.244'; // Ganti dengan host database Anda
+  $host = '103.219.251.244'; // Ganti dengan host database Anda
   $username = 'lahorasm_root'; // Ganti dengan username database Anda
   $password = '@Lgarin211'; // Ganti dengan password database Anda
   $database = 'lahorasm_root'; // Ganti dengan nama database Anda
@@ -132,36 +132,58 @@ $conn->close();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel</title>
-  <!-- Tambahkan link CSS untuk Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <!-- Tambahkan link CSS untuk Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
-  <div class="container mt-4">
-    <h2>Daftar Peminjaman Mobil</h2>
-    <div class="mb-3">
-      <div class="input-group">
-        <input type="text" id="searchInput" class="form-control" placeholder="Cari...">
-        <button type="button" class="btn btn-primary" onclick="searchData()">Cari</button>
-      </div>
-    </div>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Nama Peminjam</th>
-          <th>Tanggal Pinjam</th>
-          <th>Tanggal Kembali</th>
-          <th>Jenis Mobil</th>
-          <th>Total Harga</th>
-          <th>Status Peminjaman</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php
+    <nav class="container navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand " href="#">Daftar Mobil</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="./index.php">Beranda</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./sewa.php">Daftar Sewa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="./mobil.php">Daftar Mobil</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h2>Daftar Peminjaman Mobil</h2>
+        <div class="mb-3">
+            <div class="input-group">
+                <input type="text" id="searchInput" class="form-control" placeholder="Cari...">
+                <button type="button" class="btn btn-primary" onclick="searchData()">Cari</button>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nama Peminjam</th>
+                    <th>Tanggal Pinjam</th>
+                    <th>Tanggal Kembali</th>
+                    <th>Jenis Mobil</th>
+                    <th>Total Harga</th>
+                    <th>Status Peminjaman</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
         if ($result->num_rows > 0) {
           while ($row = $result->fetch_assoc()) {
             $id = $row["id"];
@@ -172,59 +194,83 @@ $conn->close();
             $total_harga = $row['total_harga'];
             $status_peminjaman = $row['status_peminjaman'];
         ?>
-            <tr>
-              <td><?php echo $nama_peminjam; ?></td>
-              <td><?php echo $tanggal_pinjam; ?></td>
-              <td><?php echo $tanggal_kembali; ?></td>
-              <td><?php echo $jenis_mobil; ?></td>
-              <td><?php echo $total_harga; ?></td>
-              <td><?php echo $status_peminjaman; ?></td>
-              <td>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="approveCheck<?php echo $id; ?>" <?php echo ($status_peminjaman === "APPROVE") ? "checked" : ""; ?> onclick="linkup(<?php echo $id; ?>)">
-                  <label class="form-check-label" for="approveCheck<?php echo $id; ?>">Approve</label>
-                </div>
-                <!-- <button type="button" class="btn btn-primary btn-sm" onclick="updateData(<?php echo $id; ?>)">Update</button> -->
-                <!-- <button type="button" class="btn btn-danger btn-sm" onclick="deleteData(<?php echo $id; ?>)">Hapus</button> -->
-              </td>
-            </tr>
-        <?php
+                <tr>
+                    <td><?php echo $nama_peminjam; ?></td>
+                    <td><?php echo $tanggal_pinjam; ?></td>
+                    <td><?php echo $tanggal_kembali; ?></td>
+                    <td><?php echo $jenis_mobil; ?></td>
+                    <td><?php echo $total_harga; ?></td>
+                    <td><?php echo $status_peminjaman; ?></td>
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="approveCheck<?php echo $id; ?>"
+                                <?php echo ($status_peminjaman === "APPROVE") ? "checked" : ""; ?>
+                                onclick="linkup(<?php echo $id; ?>)">
+                            <label class="form-check-label" for="approveCheck<?php echo $id; ?>">Approve</label>
+                        </div>
+                    </td>
+                </tr>
+                <?php
           }
         } else {
           echo '<tr><td colspan="7">Tidak ada data peminjaman mobil.</td></tr>';
         }
         ?>
-      </tbody>
-    </table>
-  </div>
+            </tbody>
+        </table>
+    </div>
 
-  <!-- Tambahkan script JavaScript untuk Bootstrap, pencarian, dan pengurutan -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
+    <!-- Tambahkan script JavaScript untuk Bootstrap, pencarian, dan pengurutan -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
     function linkup(params) {
-      console.log(params);
-      // get approveCheck
-      var approveCheck = document.getElementById("approveCheck" + params);
-      var p="APPROVE";
-      if(approveCheck.checked != true){
-        p="PENDING";
-      }
-
-      window.location.replace("sewa.php?action=update&blink="+p+"&id=" + params);
-    }
-    function deleteData(id) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'sewa.php', true);
-      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          console.log('Data peminjaman berhasil dihapus.');
-        } else {
-          console.error('Terjadi kesalahan saat menghapus data peminjaman.');
+        console.log(params);
+        // get approveCheck
+        var approveCheck = document.getElementById("approveCheck" + params);
+        var p = "APPROVE";
+        if (approveCheck.checked != true) {
+            p = "PENDING";
         }
-      };
-      xhr.send('action=delete&id=' + id);
+
+        window.location.replace("sewa.php?action=update&blink=" + p + "&id=" + params);
     }
-  </script>
+
+    function deleteData(id) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'sewa.php', true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                console.log('Data peminjaman berhasil dihapus.');
+            } else {
+                console.error('Terjadi kesalahan saat menghapus data peminjaman.');
+            }
+        };
+        xhr.send('action=delete&id=' + id);
+    }
+
+    function searchData() {
+        // Mendapatkan nilai input pencarian
+        var input = document.getElementById("searchInput").value.toUpperCase();
+
+        // Mendapatkan semua baris data pada tabel
+        var table = document.getElementsByTagName("table")[0];
+        var rows = table.getElementsByTagName("tr");
+
+        // Melakukan pencarian berdasarkan nama peminjam
+        for (var i = 0; i < rows.length; i++) {
+            var nameColumn = rows[i].getElementsByTagName("td")[0];
+            if (nameColumn) {
+                var name = nameColumn.textContent || nameColumn.innerText;
+                if (name.toUpperCase().indexOf(input) > -1) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    }
+    </script>
 </body>
+
 </html>
